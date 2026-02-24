@@ -1,0 +1,725 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>deepseek_api package &mdash; DeepSeek API 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            DeepSeek API
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">内容:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API参考</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">DeepSeek API</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">deepseek_api package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/deepseek_api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deepseek-api-package">
+<h1>deepseek_api package<a class="headerlink" href="#deepseek-api-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-deepseek_api.api">
+<span id="deepseek-api-api-module"></span><h2>deepseek_api.api module<a class="headerlink" href="#module-deepseek_api.api" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekHashV1Solver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">deepseek_api.api.</span></span><span class="sig-name descname"><span class="pre">DeepSeekHashV1Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wasm_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekHashV1Solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekHashV1Solver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A solver for DeepSeek’s Proof of Work (PoW) hash challenges.</p>
+<p>This class uses a WASM module to solve PoW challenges required by the DeepSeek API.
+It is implemented as a thread-safe singleton to reuse the WASM engine across multiple
+solve operations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekHashV1Solver.__new__">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wasm_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekHashV1Solver.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekHashV1Solver.__new__" title="Link to this definition"></a></dt>
+<dd><p>Create or return the singleton instance of the solver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wasm_path</strong> (<em>str</em>) – Path to the WASM module file containing the solving algorithm.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The singleton solver instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#deepseek_api.api.DeepSeekHashV1Solver" title="deepseek_api.api.DeepSeekHashV1Solver">DeepSeekHashV1Solver</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekHashV1Solver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">challenge</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekHashV1Solver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekHashV1Solver.solve" title="Link to this definition"></a></dt>
+<dd><p>Solve a PoW challenge and return the answer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>challenge</strong> (<em>dict</em>) – Challenge data containing:
+- challenge (str): The challenge string
+- salt (str): Salt value
+- difficulty (float): Difficulty level
+- expire_at (int): Expiration timestamp
+- signature (str): Challenge signature</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The solved answer value, or None if solving failed</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">deepseek_api.api.</span></span><span class="sig-name descname"><span class="pre">DeepSeekAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main client for interacting with the DeepSeek API.</p>
+<p>This class provides methods for authentication, chat session management,
+message completion, file uploads, and other DeepSeek API functionalities.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the DeepSeek API client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>str</em><em>, </em><em>optional</em>) – Existing authentication token.</p></li>
+<li><p><strong>cookies</strong> (<em>dict</em><em>, </em><em>optional</em>) – Cookie dictionary for session persistence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.set_token">
+<span class="sig-name descname"><span class="pre">set_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.set_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.set_token" title="Link to this definition"></a></dt>
+<dd><p>Set or update the authentication token.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>token</strong> (<em>str</em>) – New authentication token to use for API requests.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.is_logined">
+<span class="sig-name descname"><span class="pre">is_logined</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.is_logined"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.is_logined" title="Link to this definition"></a></dt>
+<dd><p>Check if the client is currently authenticated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if authenticated, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.login">
+<span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.login" title="Link to this definition"></a></dt>
+<dd><p>Authenticate with DeepSeek using email/mobile and password.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>account</strong> (<em>dict</em>) – Account credentials containing either:
+- email (str): Email address
+- mobile (str): Mobile number
+- password (str): Account password</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Authentication token for subsequent API calls.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – If neither email nor mobile is provided.</p></li>
+<li><p><strong>requests.HTTPError</strong> – If the login request fails.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.do_pow">
+<span class="sig-name descname"><span class="pre">do_pow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.do_pow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.do_pow" title="Link to this definition"></a></dt>
+<dd><p>Generate and solve a Proof of Work challenge for an API endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target_path</strong> (<em>str</em>) – API path that requires PoW verification.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Base64 encoded PoW response that can be used in the</dt><dd><p>’x-ds-pow-response’ header.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.create_chat">
+<span class="sig-name descname"><span class="pre">create_chat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.create_chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.create_chat" title="Link to this definition"></a></dt>
+<dd><p>Create a new chat session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ID of the newly created chat session.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.get_chatlist">
+<span class="sig-name descname"><span class="pre">get_chatlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.get_chatlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.get_chatlist" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the list of chat sessions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>update</strong> (<em>bool</em>) – If True, include updated_at parameter for pagination.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of chat sessions with their metadata:</dt><dd><ul class="simple">
+<li><p>id (str): Session ID</p></li>
+<li><p>title (str): Session title</p></li>
+<li><p>title_type (str): Title type (SYSTEM/USER)</p></li>
+<li><p>pinned (bool): Whether session is pinned</p></li>
+<li><p>updated_at (float): Last update timestamp</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.get_history_messages">
+<span class="sig-name descname"><span class="pre">get_history_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chat_session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.get_history_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.get_history_messages" title="Link to this definition"></a></dt>
+<dd><p>Retrieve message history for a specific chat session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chat_session_id</strong> (<em>str</em>) – ID of the chat session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Message history containing:</dt><dd><ul class="simple">
+<li><p>message_id (int): Message identifier</p></li>
+<li><p>role (str): USER or ASSISTANT</p></li>
+<li><p>fragments (list): Message content fragments</p></li>
+<li><p>files (list): Attached files</p></li>
+<li><p>status (str): Message status</p></li>
+<li><p>inserted_at (float): Timestamp</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.completion">
+<span class="sig-name descname"><span class="pre">completion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chat_session_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chat_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_message_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thinking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preempt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.completion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.completion" title="Link to this definition"></a></dt>
+<dd><p>Send a message and get a streaming completion response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chat_session_id</strong> (<em>str</em>) – Target chat session ID.</p></li>
+<li><p><strong>chat_text</strong> (<em>str</em>) – Message text to send.</p></li>
+<li><p><strong>parent_message_id</strong> (<em>int</em><em>, </em><em>optional</em>) – Parent message ID for context.</p></li>
+<li><p><strong>thinking</strong> (<em>bool</em>) – Enable thinking mode.</p></li>
+<li><p><strong>search</strong> (<em>bool</em>) – Enable web search capability.</p></li>
+<li><p><strong>preempt</strong> (<em>bool</em>) – Enable preemptive response.</p></li>
+<li><p><strong>files</strong> (<em>list</em>) – List of uploaded file IDs to attach.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Streaming response object containing the AI’s reply.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.api.DeepSeekAPI.upload_files">
+<span class="sig-name descname"><span class="pre">upload_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chat_session_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dealwith</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.upload_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.DeepSeekAPI.upload_files" title="Link to this definition"></a></dt>
+<dd><p>Upload files to the DeepSeek server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>list</em>) – List of file paths to upload.</p></li>
+<li><p><strong>chat_session_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Chat session ID for Referer header.</p></li>
+<li><p><strong>dealwith</strong> (<em>callable</em><em>, </em><em>optional</em>) – Callback function for status updates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of uploaded file IDs that can be used in completions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepseek_api.api.parse_completion">
+<span class="sig-prename descclassname"><span class="pre">deepseek_api.api.</span></span><span class="sig-name descname"><span class="pre">parse_completion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">completion_object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#parse_completion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.api.parse_completion" title="Link to this definition"></a></dt>
+<dd><p>Parse a streaming completion response and print the content.</p>
+<p>This is a utility function for testing and debugging purposes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>completion_object</strong> (<em>requests.Response</em>) – Streaming response from completion().</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Response message ID if available.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function prints the response content in real-time and is
+intended for testing only, not as part of the main API.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-deepseek_api.utils">
+<span id="deepseek-api-utils-module"></span><h2>deepseek_api.utils module<a class="headerlink" href="#module-deepseek_api.utils" title="Link to this heading"></a></h2>
+<p>Utils.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="deepseek_api.utils.parse_completion">
+<span class="sig-prename descclassname"><span class="pre">deepseek_api.utils.</span></span><span class="sig-name descname"><span class="pre">parse_completion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">completion_object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/utils.html#parse_completion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.utils.parse_completion" title="Link to this definition"></a></dt>
+<dd><p>解析流式补全响应</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>completion_object</strong> – requests.Response对象 (stream=True)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>响应消息ID</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">completion</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">message_id</span> <span class="o">=</span> <span class="n">parse_completion</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepseek_api.utils.guess_mime_type">
+<span class="sig-prename descclassname"><span class="pre">deepseek_api.utils.</span></span><span class="sig-name descname"><span class="pre">guess_mime_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/utils.html#guess_mime_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.utils.guess_mime_type" title="Link to this definition"></a></dt>
+<dd><p>猜测文件的MIME类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – 文件名</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>MIME类型</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-deepseek_api">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-deepseek_api" title="Link to this heading"></a></h2>
+<p>DeepSeek API Python 3</p>
+<p>Unofficial wrapper of DeepSeek Web API</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">deepseek_api.</span></span><span class="sig-name descname"><span class="pre">DeepSeekAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main client for interacting with the DeepSeek API.</p>
+<p>This class provides methods for authentication, chat session management,
+message completion, file uploads, and other DeepSeek API functionalities.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the DeepSeek API client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<em>str</em><em>, </em><em>optional</em>) – Existing authentication token.</p></li>
+<li><p><strong>cookies</strong> (<em>dict</em><em>, </em><em>optional</em>) – Cookie dictionary for session persistence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.set_token">
+<span class="sig-name descname"><span class="pre">set_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.set_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.set_token" title="Link to this definition"></a></dt>
+<dd><p>Set or update the authentication token.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>token</strong> (<em>str</em>) – New authentication token to use for API requests.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.is_logined">
+<span class="sig-name descname"><span class="pre">is_logined</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.is_logined"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.is_logined" title="Link to this definition"></a></dt>
+<dd><p>Check if the client is currently authenticated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if authenticated, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.login">
+<span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">account</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.login" title="Link to this definition"></a></dt>
+<dd><p>Authenticate with DeepSeek using email/mobile and password.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>account</strong> (<em>dict</em>) – Account credentials containing either:
+- email (str): Email address
+- mobile (str): Mobile number
+- password (str): Account password</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Authentication token for subsequent API calls.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – If neither email nor mobile is provided.</p></li>
+<li><p><strong>requests.HTTPError</strong> – If the login request fails.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.do_pow">
+<span class="sig-name descname"><span class="pre">do_pow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.do_pow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.do_pow" title="Link to this definition"></a></dt>
+<dd><p>Generate and solve a Proof of Work challenge for an API endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target_path</strong> (<em>str</em>) – API path that requires PoW verification.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Base64 encoded PoW response that can be used in the</dt><dd><p>’x-ds-pow-response’ header.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.create_chat">
+<span class="sig-name descname"><span class="pre">create_chat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.create_chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.create_chat" title="Link to this definition"></a></dt>
+<dd><p>Create a new chat session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ID of the newly created chat session.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.get_chatlist">
+<span class="sig-name descname"><span class="pre">get_chatlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.get_chatlist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.get_chatlist" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the list of chat sessions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>update</strong> (<em>bool</em>) – If True, include updated_at parameter for pagination.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>List of chat sessions with their metadata:</dt><dd><ul class="simple">
+<li><p>id (str): Session ID</p></li>
+<li><p>title (str): Session title</p></li>
+<li><p>title_type (str): Title type (SYSTEM/USER)</p></li>
+<li><p>pinned (bool): Whether session is pinned</p></li>
+<li><p>updated_at (float): Last update timestamp</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.get_history_messages">
+<span class="sig-name descname"><span class="pre">get_history_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chat_session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.get_history_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.get_history_messages" title="Link to this definition"></a></dt>
+<dd><p>Retrieve message history for a specific chat session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chat_session_id</strong> (<em>str</em>) – ID of the chat session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Message history containing:</dt><dd><ul class="simple">
+<li><p>message_id (int): Message identifier</p></li>
+<li><p>role (str): USER or ASSISTANT</p></li>
+<li><p>fragments (list): Message content fragments</p></li>
+<li><p>files (list): Attached files</p></li>
+<li><p>status (str): Message status</p></li>
+<li><p>inserted_at (float): Timestamp</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.completion">
+<span class="sig-name descname"><span class="pre">completion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chat_session_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chat_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_message_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thinking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preempt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.completion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.completion" title="Link to this definition"></a></dt>
+<dd><p>Send a message and get a streaming completion response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chat_session_id</strong> (<em>str</em>) – Target chat session ID.</p></li>
+<li><p><strong>chat_text</strong> (<em>str</em>) – Message text to send.</p></li>
+<li><p><strong>parent_message_id</strong> (<em>int</em><em>, </em><em>optional</em>) – Parent message ID for context.</p></li>
+<li><p><strong>thinking</strong> (<em>bool</em>) – Enable thinking mode.</p></li>
+<li><p><strong>search</strong> (<em>bool</em>) – Enable web search capability.</p></li>
+<li><p><strong>preempt</strong> (<em>bool</em>) – Enable preemptive response.</p></li>
+<li><p><strong>files</strong> (<em>list</em>) – List of uploaded file IDs to attach.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Streaming response object containing the AI’s reply.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekAPI.upload_files">
+<span class="sig-name descname"><span class="pre">upload_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chat_session_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dealwith</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekAPI.upload_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekAPI.upload_files" title="Link to this definition"></a></dt>
+<dd><p>Upload files to the DeepSeek server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>list</em>) – List of file paths to upload.</p></li>
+<li><p><strong>chat_session_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Chat session ID for Referer header.</p></li>
+<li><p><strong>dealwith</strong> (<em>callable</em><em>, </em><em>optional</em>) – Callback function for status updates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of uploaded file IDs that can be used in completions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekHashV1Solver">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">deepseek_api.</span></span><span class="sig-name descname"><span class="pre">DeepSeekHashV1Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wasm_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekHashV1Solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekHashV1Solver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A solver for DeepSeek’s Proof of Work (PoW) hash challenges.</p>
+<p>This class uses a WASM module to solve PoW challenges required by the DeepSeek API.
+It is implemented as a thread-safe singleton to reuse the WASM engine across multiple
+solve operations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekHashV1Solver.__new__">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wasm_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekHashV1Solver.__new__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekHashV1Solver.__new__" title="Link to this definition"></a></dt>
+<dd><p>Create or return the singleton instance of the solver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>wasm_path</strong> (<em>str</em>) – Path to the WASM module file containing the solving algorithm.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The singleton solver instance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#deepseek_api.DeepSeekHashV1Solver" title="deepseek_api.DeepSeekHashV1Solver">DeepSeekHashV1Solver</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepseek_api.DeepSeekHashV1Solver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">challenge</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/api.html#DeepSeekHashV1Solver.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.DeepSeekHashV1Solver.solve" title="Link to this definition"></a></dt>
+<dd><p>Solve a PoW challenge and return the answer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>challenge</strong> (<em>dict</em>) – Challenge data containing:
+- challenge (str): The challenge string
+- salt (str): Salt value
+- difficulty (float): Difficulty level
+- expire_at (int): Expiration timestamp
+- signature (str): Challenge signature</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The solved answer value, or None if solving failed</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepseek_api.parse_completion">
+<span class="sig-prename descclassname"><span class="pre">deepseek_api.</span></span><span class="sig-name descname"><span class="pre">parse_completion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">completion_object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepseek_api/utils.html#parse_completion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepseek_api.parse_completion" title="Link to this definition"></a></dt>
+<dd><p>解析流式补全响应</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>completion_object</strong> – requests.Response对象 (stream=True)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>响应消息ID</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">completion</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">message_id</span> <span class="o">=</span> <span class="n">parse_completion</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, q-magnet.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
