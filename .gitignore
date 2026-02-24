@@ -1,3 +1,4 @@
 wabt-*/
 *.json
 __pycache__/
+token.txt

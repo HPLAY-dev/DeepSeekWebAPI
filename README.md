@@ -15,7 +15,31 @@ Most function of the web version of DeepSeek is implemented.
 pip install requirements.txt -r
 ```
 
-### Example
+### Use in VSCode ***Continue*** plugin
+1. start `deepseek_api/api.py` and login to get a token.
+2. save it into `token.txt`(at project root)(WITH NO CRLF)
+3. start `openai-api.py`, which will fake a set of OpenAI-style api for `Continue` to use
+4. edit `config.yaml` of `Continue` and add this to `model` part.
+```yaml
+models:
+  - name: "DeepSeek"
+    provider: "openai"
+    model: "deepseek-chat"
+    apiBase: "http://localhost:8000/v1"
+    apiKey: "empty"
+    contextLength: 8192
+    completionOptions:
+      temperature: 0.7
+      maxTokens: 4096
+```
+
+### Use(Chat) in web
+1. start `deepseek_api/api.py` and login to get a token.
+2. save it into `token.txt`(at project root)(WITH NO CRLF)
+3. start `web_ui/webui.py`
+4. open `localhost:5000` in your browser
+
+### Use in your programs
 ```python
 from deepseek_api import DeepSeekAPI
 

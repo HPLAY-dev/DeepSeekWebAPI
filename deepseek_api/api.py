@@ -174,7 +174,7 @@ class DeepSeekAPI:
     This class provides methods for authentication, chat session management,
     message completion, file uploads, and other DeepSeek API functionalities.
     """
-    def __init__(self, token=None, cookies={}):
+    def __init__(self, token=None, cookies={}, wasm_path='sha3.wasm'):
         """
         Initialize the DeepSeek API client.
         
@@ -182,7 +182,7 @@ class DeepSeekAPI:
             token (str, optional): Existing authentication token.
             cookies (dict, optional): Cookie dictionary for session persistence.
         """
-        self.solver = DeepSeekHashV1Solver('sha3.wasm')
+        self.solver = DeepSeekHashV1Solver(wasm_path)
         self.cookies = cookies
         self.headers = DEFAULT_HEADERS.copy()
         if token is not None:
@@ -346,7 +346,7 @@ class DeepSeekAPI:
             headers=self.headers,
             cookies=self.cookies
         )
-        print(response.text)
+        # print(response.text)
         return response.json().get('data', {}).get('biz_data', {}).get('chat_sessions')
     
     def get_history_messages(self, chat_session_id):
@@ -370,7 +370,7 @@ class DeepSeekAPI:
         }
         response = requests.get(
             URL_API_BASE+'/api/v0/chat/history_messages',
-            params=chat_session_id,
+            params=params,
             headers=self.headers,
             cookies=self.cookies
         )
@@ -452,10 +452,10 @@ class DeepSeekAPI:
             finish_status = []
             for file_status in files_status:
                 if file_status['status'] == 'SUCCESS':
-                    print('SUCCESS: '+file_status['file_name'])
+                    # print('SUCCESS: '+file_status['file_name'])
                     finish_status.append(True)
                 elif file_status['status'] == "CONTENT_EMPTY":
-                    print('Cannot Extract Test: '+file_status['file_name'])
+                    # print('Cannot Extract Test: '+file_status['file_name'])
                     finish_status.append(True)
                 elif file_status['status'] == "PARSING":
                     finish_status.append(False)
