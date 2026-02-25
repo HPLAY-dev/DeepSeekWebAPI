@@ -409,8 +409,131 @@ class DeepSeekAPI:
         headers = self.headers.copy()
         headers.update(headers_extend)
 
-        response = requests.post('https://chat.deepseek.com/api/v0/chat/completion', stream=True, cookies=self.cookies, headers=headers, json=json_data)
+        response = requests.post(URL_API_BASE+'/api/v0/chat/completion', stream=True, cookies=self.cookies, headers=headers, json=json_data)
         return response
+
+    def continue_completion(self, chat_session_id, message_id, fallback_to_resume=True):
+        """
+        Continue a stopped completion request.
+        
+        Args:
+            chat_session_id (str): Chat session ID of the message.
+            message_id (int): The message to continue.
+            fallback_to_resume (bool): unknown.
+            
+        Returns:
+            requests.Response: Streaming response object containing the AI's reply.
+        """
+        json_data = {
+            'chat_session_id': chat_session_id,
+            'message_id': message_id,
+            'fallback_to_resume': fallback_to_resume,
+        }
+
+        response = requests.post(URL_API_BASE+'/api/v0/chat/continue', cookies=self.cookies, headers=self.headers, json=json_data, stream=True)
+        return response
+
+    def stop_completion(self, chat_session_id, message_id):
+        """
+        Stop a stopped completion request.
+        
+        Args:
+            chat_session_id (str): Chat session ID of the message.
+            message_id (int): The message to stop.
+            
+        Returns:
+            requests.Response: Streaming response object. (Possibly no usable data)
+        """
+        json_data = {
+            'chat_session_id': chat_session_id,
+            'message_id': message_id,
+        }
+
+        response = requests.post(URL_API_BASE+'/api/v0/chat/stop_stream', cookies=self.cookies, headers=self.headers, json=json_data)
+        return response
+
+    def get_user_data(self):
+        """
+        Stop a stopped completion request.
+        
+        Args:
+            chat_session_id (str): Chat session ID of the message.
+            message_id (int): The message to stop.
+            
+        Returns:
+            dict: data of the user(in biz_data)
+        
+        Examples:
+            >>> api = DeepSeekAPI('******************...')
+            >>> print(api.get_user_data)
+            {
+                "code": 0,
+                "msg": "",
+                "data": {
+                    "biz_code": 0,
+                    "biz_msg": "",
+                    "biz_data": {
+                        "id": "********-****-****-****-************", (each * is a char from 0-9 or a-f(lower))
+                        "token": "****************************************************************",
+                        "email": "",
+                        "mobile_number": "abc******jk", (abcjk is number(0-9), * is the symbol itself)
+                        "area_code": "+86",
+                        "status": 0,
+                        "id_profile": null,
+                        "id_profiles": [],
+                        "chat": {
+                            "is_muted": 0,
+                            "mute_until": null
+                        },
+                        "has_legacy_chat_history": false,
+                        "need_birthday": false
+                    }
+                }
+            }
+        """
+
+        response = requests.get(URL_API_BASE+'/api/v0/users/current', cookies=self.cookies, headers=self.headers)
+        return response.json().get('data',{}).get('biz_data',{})
+
+    def set_chat_session_title(self, chat_session_id, new_title):
+        """
+        Set new title for a chat session.
+        
+        Args:
+            chat_session_id (str): Chat session ID of the message.
+            new_title (str): The title to change.
+            
+        Returns:
+            dict: data
+        
+        Examples:
+            >>> api = DeepSeekAPI('******************...')
+            >>> print(api.set_chat_session_title('...', 'Test123'))
+            {
+                "code": 0,
+                "msg": "",
+                "data": {
+                    "biz_code": 0,
+                    "biz_msg": "",
+                    "biz_data": {
+                        "chat_session_updated_at": 1771992655.738931, (timestamp)
+                        "title": "Test123"
+                    }
+                }
+            }
+        """
+        json_data = {
+            'chat_session_id': chat_session_id,
+            'title': new_title,
+        }
+
+        response = requests.post(
+            'https://chat.deepseek.com/api/v0/chat_session/update_title',
+            cookies=self.cookies,
+            headers=self.headers,
+            json=self.json_data,
+        )
+        return response.json()
 
     def upload_files(self, files: list, chat_session_id: str=None, dealwith=None) -> list:
         """
@@ -599,5 +722,6 @@ if __name__ == '__main__':
                 print('Not defined current_chat, type "!n" or "!chat ID" to select a chat.')
                 continue
             
-            parent_message_id = parse_completion(api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, search=enable_search, preempt=False))
-            print(parent_message_id)
+            completion_object = api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, search=enable_search, preempt=False)
+            for line in completion_object.iter_lines():
+                print(line.decode('utf-8'))

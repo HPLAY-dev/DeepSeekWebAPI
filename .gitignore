@@ -2,3 +2,4 @@ wabt-*/
 *.json
 __pycache__/
 token.txt
+docs/build/

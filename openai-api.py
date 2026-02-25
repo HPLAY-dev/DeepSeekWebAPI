@@ -80,9 +80,6 @@ async def chat_proxy(request: Request):
                         elif isinstance(v_data, str):
                             text_to_send = v_data
                     
-                    # 提取内容 (保持你之前的逻辑)
-                    # ... [此处省略之前的 v_data 提取代码] ...
-                    
                     if text_to_send:
                         yield f"data: {json.dumps({'choices': [{'delta': {'content': text_to_send}}]}, ensure_ascii=False)}\n\n"
                     
