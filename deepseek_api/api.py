@@ -73,6 +73,7 @@ URL_API_CREATE_POW = URL_API_BASE+'/api/v0/chat/create_pow_challenge'
 URL_API_CREATE_CHAT = URL_API_BASE+'/api/v0/chat_session/create'
 URL_API_COMPLETION = URL_API_BASE+'/api/v0/chat/completion'
 URL_API_CHATLIST = URL_API_BASE+'/api/v0/chat_session/fetch_page'
+URL_API_SETTINGS = URL_API_BASE+'/api/v0/client/settings'
 
 class DeepSeekHashV1Solver:
     """
@@ -185,6 +186,7 @@ class DeepSeekAPI:
         self.solver = DeepSeekHashV1Solver(wasm_path)
         self.cookies = cookies
         self.headers = DEFAULT_HEADERS.copy()
+        self.session = requests.Session()
         if token is not None:
             self.headers['authorization'] = 'bearer '+token
     
@@ -251,14 +253,14 @@ class DeepSeekAPI:
             }
         
         # try:
-        #     response = requests.post(URL_API_LOGIN, headers=self.headers, json=payload)
+        #     response = self.session.post(URL_API_LOGIN, headers=self.headers, json=payload)
         #     response.raise_for_status()
         #     login_response = response.json()
         #     new_token = login_response["data"]["biz_data"]["user"].get("token")
         #     self.headers['authorization'] = 'bearer '+new_token
         # except Exception as e:
         #     raise Exception('1')
-        response = requests.post(URL_API_LOGIN, headers=self.headers, json=payload)
+        response = self.session.post(URL_API_LOGIN, headers=self.headers, json=payload)
         response.raise_for_status()
         login_response = response.json()
         new_token = login_response["data"]["biz_data"]["user"].get("token")
@@ -280,7 +282,7 @@ class DeepSeekAPI:
             'target_path': target_path,
         }
 
-        response = requests.post(
+        response = self.session.post(
             URL_API_CREATE_POW,
             cookies=self.cookies,
             headers=self.headers,
@@ -315,7 +317,7 @@ class DeepSeekAPI:
         params = {
             'lte_cursor.pinned': 'false',
         }
-        response = requests.post(
+        response = self.session.post(
             url=URL_API_CREATE_CHAT,
             headers=self.headers,
             cookies=self.cookies
@@ -341,7 +343,7 @@ class DeepSeekAPI:
             'lte_cursor.pinned': 'false',
         }
         if update: params['lte_cursor.updated_at'] = str(time.time())
-        response = requests.get(
+        response = self.session.get(
             url=URL_API_CHATLIST,
             headers=self.headers,
             cookies=self.cookies
@@ -368,15 +370,33 @@ class DeepSeekAPI:
         params = {
             'chat_session_id': chat_session_id,
         }
-        response = requests.get(
+        response = self.session.get(
             URL_API_BASE+'/api/v0/chat/history_messages',
             params=params,
             headers=self.headers,
             cookies=self.cookies
         )
         return response.json()
+
+    def get_models(self):
+        """
+        Retrieve models.
+            
+        Returns:
+            list: Models List, every element is dict. See deepseek_api/responds/query_models.json
+        """
+        params = {
+            'scope': 'model',
+        }
+        response = self.session.get(
+            URL_API_SETTINGS,
+            params=params,
+            headers=self.headers,
+            cookies=self.cookies
+        ).json().get('data', {}).get('biz_data', {})
+
         
-    def completion(self, chat_session_id, chat_text, parent_message_id=None, thinking=False, search=False, preempt=False, files=[]):
+    def completion(self, chat_session_id, chat_text, parent_message_id=None, thinking=False, search=False, preempt=False, model='default', files=[]):
         """
         Send a message and get a streaming completion response.
         
@@ -386,8 +406,9 @@ class DeepSeekAPI:
             parent_message_id (int, optional): Parent message ID for context.
             thinking (bool): Enable thinking mode.
             search (bool): Enable web search capability.
-            preempt (bool): Enable preemptive response.
+            preempt (bool): Enable preemptive response. (cannot be True in web version.)
             files (list): List of uploaded file IDs to attach.
+            models (str): Using which model to respond. (recently added. ['default', 'expert'] at 2026/4/12)
             
         Returns:
             requests.Response: Streaming response object containing the AI's reply.
@@ -409,7 +430,7 @@ class DeepSeekAPI:
         headers = self.headers.copy()
         headers.update(headers_extend)
 
-        response = requests.post(URL_API_BASE+'/api/v0/chat/completion', stream=True, cookies=self.cookies, headers=headers, json=json_data)
+        response = self.session.post(URL_API_BASE+'/api/v0/chat/completion', stream=True, cookies=self.cookies, headers=headers, json=json_data)
         return response
 
     def continue_completion(self, chat_session_id, message_id, fallback_to_resume=True):
@@ -430,7 +451,7 @@ class DeepSeekAPI:
             'fallback_to_resume': fallback_to_resume,
         }
 
-        response = requests.post(URL_API_BASE+'/api/v0/chat/continue', cookies=self.cookies, headers=self.headers, json=json_data, stream=True)
+        response = self.session.post(URL_API_BASE+'/api/v0/chat/continue', cookies=self.cookies, headers=self.headers, json=json_data, stream=True)
         return response
 
     def stop_completion(self, chat_session_id, message_id):
@@ -449,7 +470,7 @@ class DeepSeekAPI:
             'message_id': message_id,
         }
 
-        response = requests.post(URL_API_BASE+'/api/v0/chat/stop_stream', cookies=self.cookies, headers=self.headers, json=json_data)
+        response = self.session.post(URL_API_BASE+'/api/v0/chat/stop_stream', cookies=self.cookies, headers=self.headers, json=json_data)
         return response
 
     def get_user_data(self):
@@ -492,7 +513,7 @@ class DeepSeekAPI:
             }
         """
 
-        response = requests.get(URL_API_BASE+'/api/v0/users/current', cookies=self.cookies, headers=self.headers)
+        response = self.session.get(URL_API_BASE+'/api/v0/users/current', cookies=self.cookies, headers=self.headers)
         return response.json().get('data',{}).get('biz_data',{})
 
     def set_chat_session_title(self, chat_session_id, new_title):
@@ -527,7 +548,7 @@ class DeepSeekAPI:
             'title': new_title,
         }
 
-        response = requests.post(
+        response = self.session.post(
             'https://chat.deepseek.com/api/v0/chat_session/update_title',
             cookies=self.cookies,
             headers=self.headers,
@@ -559,7 +580,7 @@ class DeepSeekAPI:
             files = {
                 'file': (file, open(file, 'rb').read(), mime_type),
             }
-            response = requests.post(URL_API_BASE+'/api/v0/file/upload_file', cookies=self.cookies, headers=headers, files=files)
+            response = self.session.post(URL_API_BASE+'/api/v0/file/upload_file', cookies=self.cookies, headers=headers, files=files)
             file = response.json()["data"]["biz_data"]["files"]
             file_id = [file['id'] for file in files]
             file_ids.append(file_id)
@@ -569,7 +590,7 @@ class DeepSeekAPI:
             params = {
                 'file_ids': file_ids,
             }
-            response = requests.post(URL_API_BASE+'/api/v0/file/fetch_files', cookies=self.cookies, headers=headers, files=files)
+            response = self.session.post(URL_API_BASE+'/api/v0/file/fetch_files', cookies=self.cookies, headers=headers, files=files)
             files_status = response.json()["data"]["biz_data"]["files"]
 
             finish_status = []
