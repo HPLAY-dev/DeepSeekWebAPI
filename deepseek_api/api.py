@@ -15,16 +15,27 @@ import os
 mimetypes.init()
 
 DEFAULT_HEADERS = {
-    "Host": "chat.deepseek.com",
-    "User-Agent": "DeepSeek/1.0.13 Android/35",
-    "Accept": "application/json",
-    "Accept-Encoding": "identity",
-    "Content-Type": "application/json",
-    "x-client-platform": "android",
-    "x-client-version": "1.3.0-auto-resume",
-    "x-client-locale": "zh_CN",
-    "accept-charset": "UTF-8",
-    "referer": "https://chat.deepseek.com/"
+    'accept': '*/*',
+    'accept-language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,en-GB;q=0.6,zh-HK;q=0.5',
+    'cache-control': 'no-cache',
+    'content-type': 'application/json',
+    'dnt': '1',
+    'origin': 'https://chat.deepseek.com',
+    'pragma': 'no-cache',
+    'priority': 'u=1, i',
+    'referer': 'https://chat.deepseek.com',
+    'sec-ch-ua': '"Microsoft Edge";v="147", "Not.A/Brand";v="8", "Chromium";v="147"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0',
+    'x-app-version': '20241129.1',
+    'x-client-locale': 'zh_CN',
+    'x-client-platform': 'web',
+    'x-client-timezone-offset': '28800',
+    'x-client-version': '1.8.0',
 }
 # URL_ENDPOINTS = [
 #     '/api/v0/client/settings',
@@ -322,7 +333,8 @@ class DeepSeekAPI:
             headers=self.headers,
             cookies=self.cookies
         )
-        return response.json().get('data', {}).get('biz_data', {}).get('id')
+        raw = response.json()
+        return raw.get('data', {}).get('biz_data', {}).get('chat_session', {}).get('id')
         
     def get_chatlist(self, update=False):
         """
@@ -425,7 +437,7 @@ class DeepSeekAPI:
         headers_extend = {
             'x-ds-pow-response': self.do_pow(target_path='/api/v0/chat/completion')
         }
-        open('123.json', 'w', encoding='utf-8').write(json.dumps(json_data, indent=4, ensure_ascii=False))
+        # open('123.json', 'w', encoding='utf-8').write(json.dumps(json_data, indent=4, ensure_ascii=False))
         
         headers = self.headers.copy()
         headers.update(headers_extend)
