@@ -178,7 +178,7 @@ class DeepSeekHashV1Solver:
         # 5. 清理栈（重要：防止内存泄漏）
         add_to_stack(store, 16)
         return answer
-
+ 
 class DeepSeekAPI:
     """
     Main client for interacting with the DeepSeek API.
@@ -568,62 +568,55 @@ class DeepSeekAPI:
         )
         return response.json()
 
-    def upload_files(self, files: list, chat_session_id: str=None, dealwith=None) -> list:
+    def upload_files(self, file: str, chat_session_id: str=None, dealwith=None) -> list:
         """
         Upload files to the DeepSeek server.
         
         Args:
-            files (list): List of file paths to upload.
+            file (str): File path to upload.
             chat_session_id (str, optional): Chat session ID for Referer header.
             dealwith (callable, optional): Callback function for status updates.
             
         Returns:
-            list: List of uploaded file IDs that can be used in completions.
+            str: ID of uploaded file that can be used in completions.
         """
         # 发送 upload_file 请求
         headers = self.headers.copy()
+        del headers['content-type']
         if chat_session_id is not None:
             headers['Referer'] = 'https://chat.deepseek.com/a/chat/s/'+chat_session_id
+        else:
+            headers['Referer'] = 'https://chat.deepseek.com'
+            
+        headers_extend = {
+            'x-ds-pow-response': self.do_pow(target_path='/api/v0/file/upload_file')
+        }
+        headers.update(headers_extend)
 
         # 遍历上传的文件，发送uplaod_file请求
         file_ids = []
-        for file in files:
-            mime_type, _ = mimetypes.guess_type(os.path.basename(file))
-            files = {
-                'file': (file, open(file, 'rb').read(), mime_type),
-            }
-            response = self.session.post(URL_API_BASE+'/api/v0/file/upload_file', cookies=self.cookies, headers=headers, files=files)
-            file = response.json()["data"]["biz_data"]["files"]
-            file_id = [file['id'] for file in files]
-            file_ids.append(file_id)
+        mime_type, _ = mimetypes.guess_type(os.path.basename(file))
+        files = {
+            'file': (file, open(file, 'rb'), mime_type),
+        }
+        response = self.session.post(URL_API_BASE+'/api/v0/file/upload_file', cookies=self.cookies, headers=headers, files=files)
+        jsondata = response.json()
+        file_id = jsondata["data"]["biz_data"]["id"]
+        file_ids.append(file_id)
 
         # 开始轮询
         while True:
             params = {
-                'file_ids': file_ids,
+                'file_ids': file_id,
             }
-            response = self.session.post(URL_API_BASE+'/api/v0/file/fetch_files', cookies=self.cookies, headers=headers, files=files)
-            files_status = response.json()["data"]["biz_data"]["files"]
+            response = self.session.get(URL_API_BASE+'/api/v0/file/fetch_files', cookies=self.cookies, headers=headers, params=params)
+            data = response.json()["data"]
 
-            finish_status = []
-            for file_status in files_status:
-                if file_status['status'] == 'SUCCESS':
-                    # print('SUCCESS: '+file_status['file_name'])
-                    finish_status.append(True)
-                elif file_status['status'] == "CONTENT_EMPTY":
-                    # print('Cannot Extract Test: '+file_status['file_name'])
-                    finish_status.append(True)
-                elif file_status['status'] == "PARSING":
-                    finish_status.append(False)
-                    pass
-                    # print('Parsing: '+file_status['file_name'])
-                else:
-                    finish_status.append(True)
-            if dealwith is not None:
-                dealwith(response)
-        
-        # 返回
-        return file_ids
+            if data['biz_code'] != 0:
+                raise Exception(data['biz_msg'])
+            elif data["biz_data"]["files"][0]['status'] == 'SUCCESS':
+                # print('SUCCESS: '+file_status['file_name'])
+                return file_id
 
 def parse_completion(completion_object):
     """
@@ -717,6 +710,7 @@ if __name__ == '__main__':
     parent_message_id = None
     enable_thinking = False
     enable_search = False
+    cl = []
 
     token = input('token(blank if login): ')
     if token == '':
@@ -746,7 +740,7 @@ if __name__ == '__main__':
             cl = api.get_chatlist()
             print(cl)
         elif x[0] == '!u':
-            cl = api.upload_files([x[1]])
+            cl = api.upload_files(x[1])
             print(cl)
         elif x[0] == '!x':
             sys.exit()
@@ -755,6 +749,6 @@ if __name__ == '__main__':
                 print('Not defined current_chat, type "!n" or "!chat ID" to select a chat.')
                 continue
             
-            completion_object = api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, search=enable_search, preempt=False)
+            completion_object = api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, files=[cl], search=enable_search, preempt=False)
             for line in completion_object.iter_lines():
                 print(line.decode('utf-8'))
