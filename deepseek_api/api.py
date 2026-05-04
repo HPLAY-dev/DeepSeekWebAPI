@@ -568,7 +568,7 @@ class DeepSeekAPI:
         )
         return response.json()
 
-    def upload_files(self, file: str, chat_session_id: str=None, dealwith=None) -> list:
+    def upload_file(self, file: str, chat_session_id: str=None, dealwith=None) -> list:
         """
         Upload files to the DeepSeek server.
         
@@ -664,25 +664,17 @@ def parse_completion(completion_object):
                 # print('\n\nAccumulated token usage: '+json_data['v'])
                 pass
             elif json_data['p'] == 'response/status':
-                pass
+                continue
             else: # uncaught "P"
-                print(json_data['p'], end=' ')
-                print(json_data['v'])
-        else: # append or what
-            v_data = json_data.get('v', None)
-            if isinstance(v_data, dict):
-                for fragment in v_data.get('response', {}).get('fragments', []):
-                    if fragment['type'] == "THINK": # equals to "id" == 2,
-                        print('- THINKING ----------')
-            elif isinstance(v_data, list):
-                for fragment in v_data:
-                    if fragment['type'] == "RESPONSE": # equals to "id" == 2,
-                        print('- RESPONSE ----------')
-                        print(fragment['content'],end='')
-            elif isinstance(v_data, str):
-                print(v_data,end='')
-            else:
-                raise Exception(6)
+                pass
+        v_data = json_data.get('v', None)
+        if isinstance(v_data, str):
+            print(v_data,end='')
+        elif isinstance(v_data, dict):
+            a = v_data.get('response', {}).get('fragments', [None])[0]
+            if type(a) == dict:
+                if a.get('content') is not None:
+                    print(a.get('content'), end='')
         last_line_str = line_str[:]
     print()
     return return_object
@@ -710,7 +702,7 @@ if __name__ == '__main__':
     parent_message_id = None
     enable_thinking = False
     enable_search = False
-    cl = []
+    cl = None
 
     token = input('token(blank if login): ')
     if token == '':
@@ -749,6 +741,5 @@ if __name__ == '__main__':
                 print('Not defined current_chat, type "!n" or "!chat ID" to select a chat.')
                 continue
             
-            completion_object = api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, files=[cl], search=enable_search, preempt=False)
-            for line in completion_object.iter_lines():
-                print(line.decode('utf-8'))
+            parse_completion(api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, files=[] if cl is None else [cl], search=enable_search, preempt=False))
+            
