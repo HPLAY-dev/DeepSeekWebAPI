@@ -617,6 +617,8 @@ class DeepSeekAPI:
             elif data["biz_data"]["files"][0]['status'] == 'SUCCESS':
                 # print('SUCCESS: '+file_status['file_name'])
                 return file_id
+            
+            time.sleep(5)
 
 def parse_completion(completion_object):
     """
@@ -680,66 +682,101 @@ def parse_completion(completion_object):
     return return_object
 
 
-if __name__ == '__main__':
-    # -----------------------------------------
-    # 
-    # 1. 登录账号
-    # 
-    # -----------------------------------------
-    # # 登录
-    api = DeepSeekAPI()
-    # api.login({'mobile': '手机号', 'password': '密码'})
-    # # 使用已有Token
-    # api = DeepSeekAPI('...................................')
+api = DeepSeekAPI(token=open('token.txt',encoding='utf-8').read().strip())
+prompt = '翻译全文（到简体中文）。       - 格式以“# 书名 # 第n部分（若有标题则保留）”开始，之后如        “。             ---             ## 第n章（若有章标题则保留） 正文内容正文内容...”并以此开始（严格遵守此      式保留换行、三个减号与二级标题）        - 使用markdown格式（不在代码块中输出）      - 第一部分等类似行使用一级标题。        - 请务必完整翻译。      - 请从 “# 书名”开始输出。       - 在翻译是，请不要使用爱称等，除非爱称在文本中占大部分（如coop->cooper并翻译为库珀）        - 删除全部图片'
+with open('log', 'w', encoding='utf-8') as f:
+    r = api.completion('c2b163ad-29b0-43ef-ad48-ceeb0c39511e', prompt, None, model="expert", thinking=False, files=['file-7ff9d011-d72b-4216-8887-adb56c8cfab1'], search=False, preempt=False)
     
-    # -----------------------------------------
-    # 
-    # 2. 主要逻辑 (这里以CLI方式呈现)
-    # 
-    # -----------------------------------------
-    keep_going = True
-    current_chat = ''
-    parent_message_id = None
-    enable_thinking = False
-    enable_search = False
-    cl = None
+    for line in r.iter_lines():
+        incomplete = False
+        if not line:
+            continue
+        line_str = line.decode('utf-8')
+        try:
+            if line_str.startswith('data: '):
+                data = line_str[6:]
+                jsondata = json.loads(data)
+                for v in jsondata.get('v', []):
+                    if v.isinstance(dict):
+                        key = v.get('p')
+                        value = v.get('v')
+                        if key == 'quasi_status' and value == 'INCOMPLETE':
+                            incomplete = True
+        except:
+            pass
+        
+        v_data = json_data.get('v', None)
+        if isinstance(v_data, str):
+            print(v_data,end='')
+        elif isinstance(v_data, dict):
+            a = v_data.get('response', {}).get('fragments', [None])[0]
+            if type(a) == dict:
+                if a.get('content') is not None:
+                    print(a.get('content'), end='')
+        # data: {"p":"response","o":"BATCH","v":[{"p":"accumulated_token_usage","v":371317},{"p":"quasi_status","v":"INCOMPLETE"}]}
+        f.write(line_str+'\n')
 
-    token = input('token(blank if login): ')
-    if token == '':
-        mobile = input('mobile(blank if using mail): ')
-        mail = input('mail(blank if using mobile): ')
-        passwd = input('passwd: ')
-        print(api.login({'email':mail, 'password':passwd, 'mobile':mobile}))
-    else:
-        api.set_token(token)
-    while keep_going:
-        r = input('>')
-        x = r.split(' ', 2)
-        if x[0] == '!n':
-            current_chat = api.create_chat()
-            print(current_chat)
-        elif x[0] == '!thinking':
-            enable_thinking = not enable_thinking
-            print(enable_thinking)
-        elif x[0] == '!search':
-            enable_search = not enable_search
-            print(enable_search)
-        elif x[0] == '!chat':
-            current_chat = x[1]
-        elif x[0] == '!brk':
-            print('set a breakpoint in your ide here.')
-        elif x[0] == '!cl':
-            cl = api.get_chatlist()
-            print(cl)
-        elif x[0] == '!u':
-            cl = api.upload_files(x[1])
-            print(cl)
-        elif x[0] == '!x':
-            sys.exit()
-        else:
-            if current_chat == '':
-                print('Not defined current_chat, type "!n" or "!chat ID" to select a chat.')
-                continue
+# if __name__ == '__main__':
+#     # -----------------------------------------
+#     # 
+#     # 1. 登录账号
+#     # 
+#     # -----------------------------------------
+#     # # 登录
+#     api = DeepSeekAPI()
+#     # api.login({'mobile': '手机号', 'password': '密码'})
+#     # # 使用已有Token
+#     # api = DeepSeekAPI('...................................')
+    
+#     # -----------------------------------------
+#     # 
+#     # 2. 主要逻辑 (这里以CLI方式呈现)
+#     # 
+#     # -----------------------------------------
+#     keep_going = True
+#     current_chat = ''
+#     parent_message_id = None
+#     enable_thinking = False
+#     enable_search = False
+#     cl = None
+
+#     token = input('token(blank if login): ')
+#     if token == '':
+#         mobile = input('mobile(blank if using mail): ')
+#         mail = input('mail(blank if using mobile): ')
+#         passwd = input('passwd: ')
+#         print(api.login({'email':mail, 'password':passwd, 'mobile':mobile}))
+#     else:
+#         api.set_token(token)
+#     while keep_going:
+#         r = input('>')
+#         x = r.split(' ', 2)
+#         if x[0] == '!n':
+#             current_chat = api.create_chat()
+#             print(current_chat)
+#         elif x[0] == '!thinking':
+#             enable_thinking = not enable_thinking
+#             print(enable_thinking)
+#         elif x[0] == '!search':
+#             enable_search = not enable_search
+#             print(enable_search)
+#         elif x[0] == '!chat':
+#             current_chat = x[1]
+#         elif x[0] == '!brk':
+#             print('set a breakpoint in your ide here.')
+#         elif x[0] == '!cl':
+#             cl = api.get_chatlist()
+#             print(cl)
+#         elif x[0] == '!u':
+#             cl = api.upload_file(x[1])
+#             print(cl)
+#         elif x[0] == '!x':
+#             sys.exit()
+#         else:
+#             if current_chat == '':
+#                 print('Not defined current_chat, type "!n" or "!chat ID" to select a chat.')
+#                 continue
             
-            parse_completion(api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, files=[] if cl is None else [cl], search=enable_search, preempt=False))
+#             with open('out', 'w', encoding='utf-8') as f:
+#                 f.write(api.completion(current_chat, r, parent_message_id, thinking=enable_thinking, files=[] if cl is None else [cl], search=enable_search, preempt=False))
             
